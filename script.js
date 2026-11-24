@@ -28,7 +28,12 @@ function addBookToLibrary(title, author, pages, read) {
 // Display library books on page
 
 function updateTable() {
-    const tableBody = document.querySelector("tbody");
+
+    const table = document.querySelector("table");
+    const oldTableBody = document.querySelector("tbody");
+    table.removeChild(oldTableBody);
+    const tableBody = document.createElement("tbody");
+
     for (const book of myLibrary) {
         const row = document.createElement("tr");
         for (const property in book) {
@@ -39,8 +44,35 @@ function updateTable() {
         }
         tableBody.appendChild(row);
     }
+    table.appendChild(tableBody);
+
 }
 
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
-addBookToLibrary("best book", "amazing author", 137, true);
+addBookToLibrary("Best Book", "Amazing Author", 137, true);
 updateTable();
+
+
+// Input to new book
+
+const addNewButton = document.querySelector(".add-new");
+const submitButton = document.querySelector(".submit");
+const cancelButton = document.querySelector(".cancel");
+
+const form = document.querySelector("form");
+
+addNewButton.addEventListener("click", () => form.removeAttribute("hidden"));
+
+submitButton.addEventListener("click", () => {
+
+    const inputTitle = document.querySelector("#title").value;
+    const inputAuthor = document.querySelector("#author").value;
+    const inputPages = document.querySelector("#pages").value;
+    const inputRead = document.querySelector("#read").checked;
+
+    addBookToLibrary(inputTitle, inputAuthor, inputPages, inputRead);
+    updateTable();
+    
+});
+
+cancelButton.addEventListener("click", () => form.setAttribute("hidden", ""));
