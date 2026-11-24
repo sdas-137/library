@@ -42,6 +42,25 @@ function updateTable() {
             cell.textContent = book[property];
             row.appendChild(cell);
         }
+
+        const removeCell = document.createElement("td"); // Add remove button
+        const removeButton = document.createElement("button");
+        removeButton.classList.add("remove");
+        removeButton.setAttribute("data-id", book.id);
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+            for (let i = 0; i < myLibrary.length; i++) {
+                if (myLibrary[i].id === removeButton.dataset.id) {
+                    myLibrary.splice(i, 1);
+                    break;
+                }
+            }
+            updateTable();
+        });
+
+        removeCell.appendChild(removeButton);
+        row.appendChild(removeCell);
+
         tableBody.appendChild(row);
     }
     table.appendChild(tableBody);
