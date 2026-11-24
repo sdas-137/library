@@ -16,6 +16,10 @@ Book.prototype.info = function() {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read ? "read" : "not read yet"}.`;
 }
 
+Book.prototype.toggleRead = function() {
+    this.read = !this.read;
+}
+
 
 // Create book and store in library
 
@@ -37,20 +41,34 @@ function updateTable() {
     for (const book of myLibrary) {
         const row = document.createElement("tr");
         for (const property in book) {
-            if (property === "info") continue;
+            if (property === "info" || property === "toggleRead") continue;
             const cell = document.createElement("td");
             cell.textContent = book[property];
+
+            if (property === "read") { // Add toggle read
+                const toggleButton = document.createElement("button");
+                toggleButton.textContent = "Toggle";
+                toggleButton.addEventListener("click", () => {
+                    for (let i = 0; i < myLibrary.length; i++) {
+                        if (myLibrary[i].id === book.id) {
+                            myLibrary[i].toggleRead();
+                            break;
+                        }
+                    }
+                    updateTable();
+                });
+                cell.appendChild(toggleButton);
+            }
+
             row.appendChild(cell);
         }
 
         const removeCell = document.createElement("td"); // Add remove button
         const removeButton = document.createElement("button");
-        removeButton.classList.add("remove");
-        removeButton.setAttribute("data-id", book.id);
         removeButton.textContent = "Remove";
         removeButton.addEventListener("click", () => {
             for (let i = 0; i < myLibrary.length; i++) {
-                if (myLibrary[i].id === removeButton.dataset.id) {
+                if (myLibrary[i].id === book.id) {
                     myLibrary.splice(i, 1);
                     break;
                 }
